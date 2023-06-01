@@ -8,8 +8,6 @@
 #include "soc/rtc_cntl_reg.h"  
 #include "esp_http_server.h"
 
-// const char* ssid = "2G_CLARO_IGOR";
-// const char* password = "12121998";
 const char* ssid = "Vivo-Internet-ED42";
 const char* password = "32425121";
 
