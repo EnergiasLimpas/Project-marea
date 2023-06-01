@@ -24,10 +24,8 @@ int valor_giro;
 //  ============================================================
 //  Configurações do WiFi
 //  ============================================================
-// const char* ssid     = "Vivo-Internet-ED42";
-// const char* password = "32425121";
-const char* ssid     = "2G_CLARO_IGOR";
-const char* password = "12121998";
+const char* ssid     = "Vivo-Internet-ED42";
+const char* password = "32425121";
 
 
 //  ============================================================
