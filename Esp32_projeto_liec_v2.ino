@@ -24,15 +24,17 @@ int valor_giro;
 //  ============================================================
 //  Configurações do WiFi
 //  ============================================================
-const char* ssid     = "Vivo-Internet-ED42";
-const char* password = "32425121";
+// const char* ssid     = "Vivo-Internet-ED42";
+// const char* password = "32425121";
+const char* ssid     = "2G_CLARO_IGOR";
+const char* password = "12121998";
 
 
 //  ============================================================
 //  Configurações do Sensor Ultrassônico
 //  ============================================================
-const int pin_trigger = 5;
-const int pin_echo = 18;
+const int pin_trigger = 12; // 5
+const int pin_echo = 14; // 18
 #define SOUND_SPEED 0.034
 long duration;
 float distanciaCm;
@@ -41,17 +43,17 @@ int distanciaminima = 10;
 //  ============================================================
 //  Configurações do Buzzer
 //  ============================================================
-const int pin_buzzer = 32;
+const int pin_buzzer = 27; // 32
 
 //  ============================================================
 //  Configurações dos Motores
 //  ============================================================
-const int pin_motor_4 = 14;
-const int pin_motor_3 = 27;
-const int pin_motor_2 = 26;
-const int pin_motor_1 = 25;
-const int pin_motor_velocidade_direita = 12;
-const int pin_motor_velocidade_esquerda = 33;
+const int pin_motor_4 = 25; // 14
+const int pin_motor_3 = 33; // 27
+const int pin_motor_2 = 32; // 26
+const int pin_motor_1 = 35; // 25
+const int pin_motor_velocidade_direita = 34; // 12
+const int pin_motor_velocidade_esquerda = 33; // 33
 
 //  Função de movimento
 void movement(char move, int giro)
@@ -167,7 +169,7 @@ void loop() {
     //  Impressão de resultados 
     Serial.print("Distancia em cm: ");
     Serial.println(distanciaCm);
-    Serial.println(valor_recebido);
+    // Serial.println(valor_recebido);
 
     //  Movimento Botões
     // movement(letter_move, 8);
@@ -185,3 +187,4 @@ void loop() {
     }
   }
 }
+
