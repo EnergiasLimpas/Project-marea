@@ -8,6 +8,7 @@
 #include "soc/rtc_cntl_reg.h"  
 #include "esp_http_server.h"
 #include <BluetoothSerial.h>
+#include <analogWrite.h>
 
 
 //  ============================================================
@@ -53,7 +54,7 @@ const int pin_motor_3 = 33; // 27
 const int pin_motor_2 = 32; // 26
 const int pin_motor_1 = 35; // 25
 const int pin_motor_velocidade_direita = 34; // 12
-const int pin_motor_velocidade_esquerda = 33; // 33
+const int pin_motor_velocidade_esquerda = 26; // 33
 
 //  Função de movimento
 void movement(char move, int giro)
@@ -120,6 +121,26 @@ void movement(char move, int giro)
   }
 }
 
+// Função do buzzer
+void barulho()
+{
+  analogWrite(pin_buzzer, 50);
+  delay(700);
+  analogWrite(pin_buzzer, 0);
+  delay(1000);
+  
+}
+// Função sensor ultrassonico
+void ultrassonico(){
+    digitalWrite(pin_trigger, LOW);
+    delayMicroseconds(2);
+    digitalWrite(pin_trigger, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(pin_trigger, LOW);
+    duration = pulseIn(pin_echo, HIGH);
+    distanciaCm = duration * SOUND_SPEED/2;
+}
+
 //  ============================================================
 //  Setup
 //  ============================================================
@@ -151,24 +172,21 @@ void setup() {
 //  Loop
 //  ============================================================
 void loop() {
+  ultrassonico();
   if (SerialBT.available() > 0){
   // if(begin == 1){
-    char letter_move = 's';
+    char letter_move = 'p';
     valor_recebido =(char)SerialBT.read();
-    valor_giro =(int)SerialBT.read();
+    //valor_giro =(int)SerialBT.read();
+    valor_giro = 0;
 
     //  Le as informações em cm do sensor ultrassônico
-    digitalWrite(pin_trigger, LOW);
-    delayMicroseconds(2);
-    digitalWrite(pin_trigger, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(pin_trigger, LOW);
-    duration = pulseIn(pin_echo, HIGH);
-    distanciaCm = duration * SOUND_SPEED/2;
 
     //  Impressão de resultados 
     Serial.print("Distancia em cm: ");
     Serial.println(distanciaCm);
+    Serial.print("Valor recebido: ");
+    Serial.println(valor_recebido);
     // Serial.println(valor_recebido);
 
     //  Movimento Botões
@@ -177,14 +195,29 @@ void loop() {
       letter_move = 'w';
       movement(letter_move, valor_giro);
     }
-    else if(valor_recebido == 'Z'){
+    else if(valor_recebido == 'Z' || distanciaCm < 7){
       letter_move = 'p';
       movement(letter_move, valor_giro);
     }
     else if(valor_recebido == 'R'){
       letter_move = 's';
       movement(letter_move, valor_giro);
+      while(valor_recebido != 'Z' && distanciaCm > 7)
+      {
+        barulho();
+        valor_recebido =(char)SerialBT.read();
+        ultrassonico();
+        Serial.print("Distancia em cm: ");
+        Serial.println(distanciaCm);
+        Serial.print("Valor recebido: ");
+        Serial.println(valor_recebido);
+        if( distanciaCm < 7 || valor_recebido == 'Z')
+        {
+          letter_move = 'p';
+          movement(letter_move, valor_giro);
+        }
+      }
     }
+  
   }
 }
-
